@@ -54,14 +54,35 @@ async def on_reaction_remove(reaction, user):
 async def based(ctx, user: discord.Member=None):
 	if user == None:
 		user = ctx.message.author
-	await ctx.send(f'{user}\'s based count: {getcount(str(user.id))}')
+	await ctx.send(f'{user}\'s <:based:758844015767584799> count: {getcount(str(user.id))}')
 
-@bot.event
+@bot.command()
+async def lb(ctx):
+	leaderboard = sorted(count.items(), key=lambda x: x[1], reverse=True)
+	print(leaderboard[0][0])
+	await ctx.send(f'{bot.get_user(int(leaderboard[0][0])).mention} is the most based')
+
+@bot.listen('on_message')
 async def on_message(msg):
-	if(msg.content.lower() == 'based'):
-		await msg.channel.send(f'{msg.author.mention}, based!')
-	if(msg.content.lower() == 'based on what' or msg.content.lower() == 'based on what?'):
-		await msg.channel.send(f'{msg.author.mention}, based on based')
-	await bot.process_commands(msg)
+	if('<:based:758844015767584799>' in msg.content):
+		await msg.add_reaction('<:based:758844015767584799>')
+	elif('based on what' in msg.content.lower()):
+		await msg.channel.send(f'{msg.author.mention} based on based')
+	elif('based?' in msg.content.lower()):
+		await msg.channel.send(f'{msg.author.mention} Based.')
+	elif('unbased' in msg.content.lower()):
+		await msg.add_reaction('🇺')
+		await msg.add_reaction('🇳')
+		await msg.add_reaction('🇧')
+		await msg.add_reaction('🇦')
+		await msg.add_reaction('🇸')
+		await msg.add_reaction('🇪')
+		await msg.add_reaction('🇩')
+	elif('based' in msg.content.lower()):
+		await msg.add_reaction('🇧')
+		await msg.add_reaction('🇦')
+		await msg.add_reaction('🇸')
+		await msg.add_reaction('🇪')
+		await msg.add_reaction('🇩')
 
 bot.run(secret.payload.data.decode('UTF-8'))
